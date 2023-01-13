@@ -1,8 +1,7 @@
 import Foundation
 import Dispatch
 
-import Clibgraphviz
-
+import graphvizFramework
 /**
  A GraphViz renderer.
 

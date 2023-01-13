@@ -1,4 +1,4 @@
-import Clibgraphviz
+import graphvizFramework
 
 /// A libgit error.
 public struct Error: Swift.Error {
