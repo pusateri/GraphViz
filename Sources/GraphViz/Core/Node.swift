@@ -367,6 +367,11 @@ extension Node {
         @Attribute("root")
         public var root: Bool?
 
+
+        @Attribute("tooltip")
+        public var tooltip: String?
+
+
         // MARK: patchwork
 
         /// Indicates the preferred area for a node or empty cluster when laid out by patchwork.
@@ -408,6 +413,7 @@ extension Node.Attributes {
             _samplePoints,
             _pin,
             _position,
+            _tooltip,
             _root,
             _area
         ]

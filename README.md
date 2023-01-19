@@ -3,12 +3,12 @@
 ![CI][ci badge]
 [![Documentation][documentation badge]][documentation]
 
-A Swift package for working with [GraphViz][graphviz].
+A Swift package for working with [GraphViz][graphviz] on macOS, iOS, and iOS Simulator.
 
 ## Requirements
 
 - Swift 5.2+
-- GraphViz
+- graphvizFramework from https://github.com/pusateri/GraphvizFrameworkPkg
 
 ## Usage
 
@@ -17,7 +17,12 @@ import GraphViz
 
 var graph = Graph(directed: true)
 
-let a = Node("a"), b = Node("b"), c = Node("c")
+let a = Node("a")
+graph.append(a)
+let b = Node("b")
+graph.append(b)
+let c = Node("c")
+graph.append(c)
 
 graph.append(Edge(from: a, to: b))
 graph.append(Edge(from: a, to: c))
@@ -27,12 +32,11 @@ b_c.constraint = false
 graph.append(b_c)
 
 // Render image to SVG using dot layout algorithm
-graph.render(using: .dot, to: .svg) { result in 
-  guard .success(let data) = result,
-        let svg = String(data: data, encoding: .utf8)
-  else { return }
-
-  print(svg)
+graph.render(using: .dot, to: .svg) { result in
+    guard case .success(let data) = result else { return } 
+    if let svg = String(data: data, encoding: .utf8) {
+        print(svg)
+    }
 }
 ```
 
@@ -62,69 +66,22 @@ let graph = Graph(directed: true) {
 }
 ```
 
-> **Note**:
-> Swift 5.1 may require explicit typecast expressions in order to
-> reconcile use of custom edge operators like `-->`.
-> (`error: ambiguous reference to member '-->'`)
-
 ## Installation
 
 ### System Dependencies
 
-You can install GraphViz on your system by running the following command:
+This package has been reworked to include a Graphviz framework for macOS, iOS, and iOS Simulator.
+It will not look at graphiz libraries on your machine.
+The Graphviz framework is version 7.0.6 and is packaged as a Swift Package.
 
-```terminal
-# macOS
-$ brew install graphviz
+Add both of these swift packages to your project and the cgraph library will work on these platforms.
+It does not contain the neato_layout yet, just dot.
 
-# Linux (Ubuntu)
-$ sudo apt-get install graphviz
-```
+You no longer have to sign anything.
 
-> **Important**:
-> If you add GraphViz to your macOS app
-> and installed system dependencies using Homebrew,
-> Xcode may emit an error message like the following:
->
-> ```
-> Warning: Could not load "/usr/lib/graphviz/libgvplugin_gdk.so.6"
-> It was found, so perhaps one of its dependents was not. Try ldd.
-> ```
->
-> One solution is to run the following commands to sign the dependencies
-> (replacing `MyName (MyTeam)` with your developer account name and team name):
->
-> ```terminal
-> $ codesign -f -s "Apple Development: MyName (MyTeam)" /usr/local/opt/*/lib/*.dylib
-> $ codesign -f -s "Apple Development: MyName (MyTeam)" /usr/local/Cellar/*/*/lib/*.dylib
-> ```
+https://github.com/pusateri/GraphViz
+https://github.com/pusateri/GraphvizFrameworkPkg
 
-### Swift Package Manager
-
-Add the GraphViz package to your target dependencies in `Package.swift`:
-
-```swift
-import PackageDescription
-
-let package = Package(
-  name: "YourProject",
-  dependencies: [
-    .package(
-        url: "https://github.com/SwiftDocOrg/GraphViz",
-        from: "0.4.1"
-    ),
-  ]
-)
-```
-
-Add `GraphViz` as a dependency to your target(s):
-
-```swift
-targets: [
-.target(
-    name: "YourTarget",
-    dependencies: ["GraphViz"]),
-```
 
 ## License
 
